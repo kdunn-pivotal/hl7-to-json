@@ -15,9 +15,6 @@ This project shows how to convert HL7 electronic medical record data into JSON, 
 
 running: `cat ACK^R01.hl7 | /Users/kdunn/anaconda3/bin/python hl7_to_dict.py`
 
-    MSH|^~\&|MO|SSSC3261|GE - Lab Systems|QML^2184^AUSNATA|200004120817+1000||ACK^R01|SSSC3261_20000412-7|P|2.3.1^AUS&Australia&ISO3166-1|||NE|NE|AUS|ASCII|en^english^ISO639
-MSA|AA|GELS_20000412-2.243
-
     {'msh': {'accept_acknowledgment_type': {'id': {'id': 'NE'}},
          'alternate_character_set_handling_scheme': {'id': {'id': 'AA'}},
          'application_acknowledgment_type': {'id': {'id': 'NE'}},
