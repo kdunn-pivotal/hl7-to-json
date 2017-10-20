@@ -46,5 +46,10 @@ running: `cat ACK^R01.hl7 | PYTHONIOENCODING="ISO-8859-1" python hl7_to_dict.py`
 
     END OF RECORD
 
+### Record Generator:
+
+    $ cd hl7-record-generator
+    $ mvn clean package
+    $ java -cp target/hl7-record-generator-1.0-SNAPSHOT-shaded.jar io.pivotal.pde.Application 10 /tmp/hl7-messages
 
 
