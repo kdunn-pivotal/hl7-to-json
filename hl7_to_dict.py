@@ -10,8 +10,9 @@ Example Usage:
 
 """
 
+import codecs
 from sys import stdin
-from io import TextIOWrapper
+from io import TextIOWrapper, BufferedReader, BytesIO
 from pprint import pprint
 from hl7apy.parser import parse_message
 from hl7apy.exceptions import ParserError
@@ -57,9 +58,16 @@ def hl7_message_to_dict(m, use_long_name=True):
     else:
         return m.to_er7() 
 
-input_stream = TextIOWrapper(stdin.buffer, encoding='ISO-8859-1')
+#reader = BufferedReader(BytesIO(stdin))
 
-for s in input_stream.read().split("\r"):
+#try:
+#    input_stream = TextIOWrapper(reader, encoding='ISO-8859-1').read()
+#except AttributeError:
+#    input_stream = TextIOWrapper(stdin.read(), encoding='ISO-8859-1').read()
+
+#stdin = codecs.getreader('ISO-8859-1')(stdin)
+
+for s in stdin.read().split("\n"):
     d = hl7_str_to_dict(s)
     pprint(d)
     print("\nRECORD\n")
