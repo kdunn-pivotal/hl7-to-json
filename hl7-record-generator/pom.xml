@@ -9,6 +9,13 @@
     <version>1.0-SNAPSHOT</version>
 
     <dependencies>
+        <!-- This is the fake name generator -->
+        <dependency>
+            <groupId>com.github.javafaker</groupId>
+            <artifactId>javafaker</artifactId>
+            <version>0.12</version>
+        </dependency>
+
         <!-- This is the core HAPI library -->
         <dependency>
             <groupId>ca.uhn.hapi</groupId>
