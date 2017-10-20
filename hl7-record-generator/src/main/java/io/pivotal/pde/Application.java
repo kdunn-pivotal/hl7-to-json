@@ -5,6 +5,7 @@ import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.HapiContext;
 import ca.uhn.hl7v2.parser.CanonicalModelClassFactory;
 import ca.uhn.hl7v2.parser.Parser;
+import com.github.javafaker.Faker;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -49,7 +50,7 @@ public class Application {
 
     public static void main(String[] args) {
 
-        int count = 1;
+        int count = 100;
         if (args.length > 0) {
             count = Integer.parseInt(args[0]);
         }
@@ -63,10 +64,29 @@ public class Application {
     }
 
     private void generateMessages(int count, String destDir) {
+        Path fn = Paths.get(destDir,  "hl7-samples.txt");
+        BufferedWriter writer;
+        try {
+            writer = Files.newBufferedWriter(fn);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+
         for (int i = 1; i <= count; i++) {
+
+            Faker faker = new Faker();
+
+            //String name = faker.name().fullName();
+            String firstName = faker.name().firstName();
+            String lastName = faker.name().lastName();
+
+            String streetAddress = faker.address().streetAddress();
+
             String name = getRandomName();
+
             String m = "MSH|^~\\&|||||" + formatDate(new Date(), "YYYYMMddHHmmss.SSSZ") + "||MDM^T02|" + r.nextInt(100) + "|P|2.3.1^AUS&Australia&ISO3166-1|115||AL|AL|AUS\r" +
-                    "EVN|T02|" + formatDate(new Date(), "YYYYMMddHHmm") + "\r" + /* not supported in hl7apy */
+                    "EVN|T02|" + formatDate(new Date(), "YYYYMMddHHmm") + "\r" +
                     "PID|1||" + generateRandomSSN() + "||" + name + "||" + formatDate(randomBirthday(), "YYYYMMdd") + "|F\r" +
                     "PV1|1|O|" + getRandomDepartment() + "^" + r.nextInt(100) + "^" + r.nextInt(100) + "\r" +
                     "TXA|1|CN|TX|" + formatDate(getRecentDate(), "YYYYMMddHHmmss") + "||||||||DOC-ID-1000" + i + "|||||AU||AV\r" +
@@ -89,9 +109,8 @@ public class Application {
                 continue;
             }
 
-            Path fn = Paths.get(destDir, name.replace("^", "_") + ".txt");
-            try (BufferedWriter writer = Files.newBufferedWriter(fn)) {
-                writer.write(m);
+            try {
+                writer.write(m + "\n");
             } catch (IOException e) {
                 e.printStackTrace();
                 continue;
@@ -99,6 +118,13 @@ public class Application {
 
             System.out.println("wrote message " + i + " to " + fn.toString());
         }
+
+        try {
+            writer.close();
+        } catch (java.io.IOException ioe) {
+
+        }
+
 
     }
 
@@ -174,7 +200,13 @@ public class Application {
         } catch (URISyntaxException | IOException e) {
             e.printStackTrace();
         }
-        return lines[r.nextInt(lines.length)] + "^";
+
+        Faker faker = new Faker();
+
+        String firstName = faker.name().firstName();
+        String lastName = faker.name().lastName();
+
+        return lastName + "^" + firstName + "^";
     }
 
     private String formatDate(Date date, String format) {
